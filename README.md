@@ -11,4 +11,4 @@ Run `./start.sh`
 
 ## Step 3
 
-Run `python biovdb.py /path/to/your/data/GPLxx.cs.gz`
+Run `python biovdb.py /path/to/your/data/GPLxx.csv.gz`
