@@ -7,7 +7,7 @@ Download the data (.csv.gz file) from https://huggingface.co/datasets/mwinn99/GP
 
 ## Step 2
 
-Run `./start.sh`
+Run `./start-server.sh`
 
 ## Step 3
 
