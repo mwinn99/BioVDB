@@ -5,6 +5,8 @@
 
 Download data from the platform of choice (.csv.gz file) from https://huggingface.co/collections/mwinn99/biovdb-658daf0c3ceccd00f3ad63a9
 
+https://huggingface.co/datasets/mwinn99/GPL570
+
 ## Step 2
 
 Run `./start-server.sh`
