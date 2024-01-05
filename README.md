@@ -17,4 +17,7 @@ Run `python biovdb.py /path/to/your/data/GPLxx.csv.gz`
 
 ### For information on running queries, similarity search and other features, see the official Qdrant documentation.
 
+#### Code may take 1-3 hours to run depending on file size
+
+
 https://qdrant.tech/documentation/
