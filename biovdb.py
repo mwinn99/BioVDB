@@ -15,7 +15,6 @@ QDRANT_URL = "http://localhost:6333"
 
 def batched(iterable, n):
     "Batch data into tuples of length n. The last batch may be shorter."
-    # batched('ABCDEFG', 3) --> ABC DEF G
     if n < 1:
         raise ValueError('n must be at least one')
     it = iter(iterable)
@@ -26,17 +25,17 @@ def read_dataset(path):
     it = pd.read_csv(path, chunksize=100)
     chunk = next(it)
     n_meta = 8
-    N = chunk.shape[1] - 8
+    N = chunk.shape[1] - n_meta
     yield chunk.columns[n_meta:]
 
     it = itertools.chain([chunk], it)
     for chunk in it:
-        metadata = chunk.iloc[:,:n_meta]
-        data = chunk.iloc[:,n_meta:].fillna(-1)
+        metadata = chunk.iloc[:, :n_meta]
+        data = chunk.iloc[:, n_meta:].fillna(-1)
         for i in range(metadata.shape[0]):
-            md = metadata.iloc[i,:].to_dict()
-            md = {k:(v if not pd.isnull(v) else None) for k,v in md.items()}
-            x = data.iloc[i,:].to_list()
+            md = metadata.iloc[i, :].to_dict()
+            md = {k: (v if not pd.isnull(v) else None) for k, v in md.items()}
+            x = data.iloc[i, :].to_list()
             yield md, x
 
 class Client(object):
@@ -45,21 +44,29 @@ class Client(object):
         self._cnames = shelve.open(os.path.join(os.path.expanduser(CACHE_PATH), "cnames"))
         self._cx = QdrantClient(url=QDRANT_URL)
 
-    def create(self, key: str, path: str):
+    def create_collection(self, key: str, path: str):
         it = read_dataset(path)
         columns = next(it)
         N = len(columns)
         self._cnames[key] = columns
 
-        self._cx.recreate_collection(
-            collection_name=key,
-            vectors_config=VectorParams(size=N, distance=Distance.EUCLID),
-        )
+        # Check if the collection exists
+        try:
+            self._cx.describe_collection(collection_name=key)
+            collection_exists = True
+        except Exception as e:
+            # Handle specific exception if possible
+            collection_exists = False
 
-        total = 0
+        if not collection_exists:
+            self._cx.create_collection(
+                collection_name=key,
+                vectors_config=VectorParams(size=N, distance=Distance.EUCLID),
+            )
+
         with tqdm.tqdm(desc=key) as pbar:
             for chunk in batched(it, 10):
-                points=[
+                points = [
                     PointStruct(
                         id=int(metadata["GSM"][3:]),
                         vector=data,
@@ -71,15 +78,16 @@ class Client(object):
                 self._cx.upsert(
                     collection_name=key,
                     points=points
-
                 )
 
                 pbar.update(len(points))
 
-
 if __name__ == "__main__":
-
-    path = sys.argv[1]
-
+    paths = sys.argv[1:]
+    
     client = Client()
-    client.create("GPL570", path)
+
+    for path in paths:
+        platform_name = os.path.splitext(os.path.splitext(os.path.basename(path))[0])[0]
+        client.create_collection(platform_name, path)
+
