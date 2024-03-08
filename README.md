@@ -22,5 +22,10 @@ Examples of basic query and similarity search are available as jupyter notebooks
 For information on running queries, similarity search and other features, see the official Qdrant documentation.
 
 
-
 https://qdrant.tech/documentation/
+
+## Reference
+
+Winnicki MJ, Brown CA, Porter HL, Giles CB, Wren JD, **BioVDB: biological vector database for high-throughput gene expression meta-analysis**, Frontiers in Artificial Intelligence 7 (2024)
+
+https://www.frontiersin.org/articles/10.3389/frai.2024.1366273
