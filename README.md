@@ -1,5 +1,6 @@
 # BioVDB
 
+![Alt text](https://www.frontiersin.org/files/Articles/1366273/frai-07-1366273-HTML-r1/image_m/frai-07-1366273-g004.jpg)
 
 ## Step 1 - Download data
 
@@ -24,7 +25,7 @@ For information on running queries, similarity search and other features, see th
 
 https://qdrant.tech/documentation/
 
-## Reference
+## Citation
 
 Winnicki MJ, Brown CA, Porter HL, Giles CB, Wren JD, **BioVDB: biological vector database for high-throughput gene expression meta-analysis**, Frontiers in Artificial Intelligence 7 (2024)
 
